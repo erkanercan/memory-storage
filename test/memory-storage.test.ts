@@ -140,5 +140,17 @@ describe("MemoryStorage", () => {
       storage.rollback();
       expect(storage.get("key")).toBe("value");
     });
+
+    it("should commit rollback multiple caches to the correct state", () => {
+      storage.set("a", "1");
+      storage.set("b", "2");
+      storage.begin();
+      storage.set("a", "3");
+      storage.begin();
+      storage.set("b", "4");
+      storage.commit();
+      storage.rollback();
+      expect(storage.get("a")).toBe("1");
+    });
   });
 });
