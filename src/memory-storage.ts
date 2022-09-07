@@ -58,11 +58,10 @@ class MemoryStorage {
    * @returns {string} Returns OK if key is set successfully
    */
   set(key: string, value: string): string {
-    if (isEmptyArray(this.transactions)) {
-      this.cache[key] = value;
-    } else {
-      this.transactions[this.transactions.length - 1].cache[key] = value;
-    }
+    const cache = isEmptyArray(this.transactions)
+      ? this.cache
+      : this.transactions[this.transactions.length - 1].cache;
+    cache[key] = value;
     return RETURN_CODES.OK;
   }
 
@@ -72,13 +71,13 @@ class MemoryStorage {
    * @returns {string} Returns the value of the key if it exists, KEY_NOT_FOUND if key does not exist
    */
   get(key: string): string {
-    if (isEmptyArray(this.transactions)) {
-      return this.cache[key] || RETURN_CODES.KEY_NOT_FOUND;
+    const cache = isEmptyArray(this.transactions)
+      ? this.cache
+      : this.transactions[this.transactions.length - 1].cache;
+    if (!cache[key]) {
+      return RETURN_CODES.KEY_NOT_FOUND;
     }
-    return (
-      this.transactions[this.transactions.length - 1].cache[key] ||
-      RETURN_CODES.KEY_NOT_FOUND
-    );
+    return cache[key];
   }
 
   /**
@@ -87,17 +86,13 @@ class MemoryStorage {
    * @returns {string} Returns OK if key is deleted successfully
    */
   delete(key: string): string {
-    if (isEmptyArray(this.transactions)) {
-      if (!this.cache[key]) {
-        return RETURN_CODES.KEY_NOT_FOUND;
-      }
-      delete this.cache[key];
-    } else {
-      if (!this.transactions[this.transactions.length - 1].cache[key]) {
-        return RETURN_CODES.KEY_NOT_FOUND;
-      }
-      delete this.transactions[this.transactions.length - 1].cache[key];
+    const cache = isEmptyArray(this.transactions)
+      ? this.cache
+      : this.transactions[this.transactions.length - 1].cache;
+    if (!cache[key]) {
+      return RETURN_CODES.KEY_NOT_FOUND;
     }
+    delete cache[key];
     return RETURN_CODES.OK;
   }
 
@@ -107,12 +102,10 @@ class MemoryStorage {
    * @returns {number} Returns the number of times a value appears in the cache
    */
   count(value: string): number {
-    if (isEmptyArray(this.transactions)) {
-      return Object.values(this.cache).filter((v) => v === value).length;
-    }
-    return Object.values(
-      this.transactions[this.transactions.length - 1].cache
-    ).filter((v) => v === value).length;
+    const cache = isEmptyArray(this.transactions)
+      ? this.cache
+      : this.transactions[this.transactions.length - 1].cache;
+    return Object.values(cache).filter((v) => v === value).length;
   }
 }
 
