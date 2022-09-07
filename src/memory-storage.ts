@@ -14,11 +14,11 @@ class MemoryStorage {
     const transactionId = this.transactions.length + 1;
     let cache = {};
     if (!isEmptyArray(this.transactions)) {
-      cache = { ...this.transactions[this.transactions.length - 1].tempCache };
+      cache = { ...this.transactions[this.transactions.length - 1].cache };
     } else {
       cache = { ...this.cache };
     }
-    this.transactions.push({ transactionId, tempCache: cache });
+    this.transactions.push({ transactionId, cache });
     return RETURN_CODES.OK;
   }
 
@@ -30,11 +30,11 @@ class MemoryStorage {
     if (isEmptyArray(this.transactions)) {
       return RETURN_CODES.NO_TRANSACTION;
     }
-    const { tempCache } = this.transactions.pop();
+    const { cache: tempCache } = this.transactions.pop();
     if (isEmptyArray(this.transactions)) {
       this.cache = tempCache;
     } else {
-      this.transactions[this.transactions.length - 1].tempCache = tempCache;
+      this.transactions[this.transactions.length - 1].cache = tempCache;
     }
     return RETURN_CODES.OK;
   }
@@ -61,7 +61,7 @@ class MemoryStorage {
     if (isEmptyArray(this.transactions)) {
       this.cache[key] = value;
     } else {
-      this.transactions[this.transactions.length - 1].tempCache[key] = value;
+      this.transactions[this.transactions.length - 1].cache[key] = value;
     }
     return RETURN_CODES.OK;
   }
@@ -76,7 +76,7 @@ class MemoryStorage {
       return this.cache[key] || RETURN_CODES.KEY_NOT_FOUND;
     }
     return (
-      this.transactions[this.transactions.length - 1].tempCache[key] ||
+      this.transactions[this.transactions.length - 1].cache[key] ||
       RETURN_CODES.KEY_NOT_FOUND
     );
   }
@@ -93,10 +93,10 @@ class MemoryStorage {
       }
       delete this.cache[key];
     } else {
-      if (!this.transactions[this.transactions.length - 1].tempCache[key]) {
+      if (!this.transactions[this.transactions.length - 1].cache[key]) {
         return RETURN_CODES.KEY_NOT_FOUND;
       }
-      delete this.transactions[this.transactions.length - 1].tempCache[key];
+      delete this.transactions[this.transactions.length - 1].cache[key];
     }
     return RETURN_CODES.OK;
   }
@@ -111,7 +111,7 @@ class MemoryStorage {
       return Object.values(this.cache).filter((v) => v === value).length;
     }
     return Object.values(
-      this.transactions[this.transactions.length - 1].tempCache
+      this.transactions[this.transactions.length - 1].cache
     ).filter((v) => v === value).length;
   }
 }
