@@ -12,12 +12,9 @@ class MemoryStorage {
    */
   begin(): string {
     const transactionId = this.transactions.length + 1;
-    let cache = {};
-    if (!isEmptyArray(this.transactions)) {
-      cache = { ...this.transactions[this.transactions.length - 1].cache };
-    } else {
-      cache = { ...this.cache };
-    }
+    const cache = isEmptyArray(this.transactions)
+      ? { ...this.cache }
+      : { ...this.transactions[this.transactions.length - 1].cache };
     this.transactions.push({ transactionId, cache });
     return RETURN_CODES.OK;
   }
