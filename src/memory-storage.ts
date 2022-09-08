@@ -1,10 +1,10 @@
 import { RETURN_CODES } from "./constants";
 import { isEmptyArray } from "./utils";
-import { TransactionsType } from "./types";
+import { TransactionType } from "./types";
 
 class MemoryStorage {
   cache: Record<string, string> = {};
-  transactions: TransactionsType[] = [];
+  transactions: TransactionType[] = [];
 
   /**
    * @description Starts a new transaction
