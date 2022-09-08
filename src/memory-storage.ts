@@ -1,6 +1,6 @@
-import { RETURN_CODES } from "./constants";
-import { isEmptyArray } from "./utils";
-import { TransactionType } from "./types";
+import { RETURN_CODES } from './constants';
+import { isEmptyArray } from './utils';
+import { TransactionType } from './types';
 
 class MemoryStorage {
   cache: Record<string, string> = {};
@@ -55,9 +55,7 @@ class MemoryStorage {
    * @returns {string} Returns OK if key is set successfully
    */
   set(key: string, value: string): string {
-    const cache = isEmptyArray(this.transactions)
-      ? this.cache
-      : this.transactions[this.transactions.length - 1].cache;
+    const cache = isEmptyArray(this.transactions) ? this.cache : this.transactions[this.transactions.length - 1].cache;
     cache[key] = value;
     return RETURN_CODES.OK;
   }
@@ -68,9 +66,7 @@ class MemoryStorage {
    * @returns {string} Returns the value of the key if it exists, KEY_NOT_FOUND if key does not exist
    */
   get(key: string): string {
-    const cache = isEmptyArray(this.transactions)
-      ? this.cache
-      : this.transactions[this.transactions.length - 1].cache;
+    const cache = isEmptyArray(this.transactions) ? this.cache : this.transactions[this.transactions.length - 1].cache;
     if (!cache[key]) {
       return RETURN_CODES.KEY_NOT_FOUND;
     }
@@ -83,9 +79,7 @@ class MemoryStorage {
    * @returns {string} Returns OK if key is deleted successfully
    */
   delete(key: string): string {
-    const cache = isEmptyArray(this.transactions)
-      ? this.cache
-      : this.transactions[this.transactions.length - 1].cache;
+    const cache = isEmptyArray(this.transactions) ? this.cache : this.transactions[this.transactions.length - 1].cache;
     if (!cache[key]) {
       return RETURN_CODES.KEY_NOT_FOUND;
     }
@@ -99,9 +93,7 @@ class MemoryStorage {
    * @returns {number} Returns the number of times a value appears in the cache
    */
   count(value: string): number {
-    const cache = isEmptyArray(this.transactions)
-      ? this.cache
-      : this.transactions[this.transactions.length - 1].cache;
+    const cache = isEmptyArray(this.transactions) ? this.cache : this.transactions[this.transactions.length - 1].cache;
     return Object.values(cache).filter((v) => v === value).length;
   }
 }

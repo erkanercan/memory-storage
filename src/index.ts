@@ -1,7 +1,7 @@
-import { createInterface } from "readline";
-import { COMMANDS, RETURN_CODES } from "./constants";
-import MemoryStorage from "./memory-storage";
-import { getEasterEgg, getHelpText } from "./utils";
+import { createInterface } from 'readline';
+import { COMMANDS, RETURN_CODES } from './constants';
+import MemoryStorage from './memory-storage';
+import { getEasterEgg, getHelpText } from './utils';
 
 const rl = createInterface({
   input: process.stdin,
@@ -15,8 +15,8 @@ console.log(getHelpText());
 
 rl.prompt();
 
-rl.on("line", (line) => {
-  const [command, ...args] = line.split(" ");
+rl.on('line', (line) => {
+  const [command, ...args] = line.split(' ');
   switch (command.toUpperCase()) {
     case COMMANDS.SET:
       if (!args[0]) {
@@ -61,7 +61,7 @@ rl.on("line", (line) => {
     case COMMANDS.HELP:
       console.log(getHelpText());
       break;
-    case "EGG":
+    case 'EGG':
       console.log(getEasterEgg());
       break;
     default:
